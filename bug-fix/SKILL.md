@@ -68,7 +68,7 @@ Never merge MRs (MR/PR on <CODE_HOST>). The developer reviews and merges.
 
 ## After the developer merges
 
-1. Confirm the merge for every MR of the ticket. Then confirm deploy provenance for the env <QA_TEAM> will use ([`deploy-check`](../deploy-check/SKILL.md)).
+1. Confirm the merge for every MR of the ticket. Then confirm deploy provenance for the env <QA_TEAM> will use ([`deploy-check`](../deploy-check/SKILL.md)); if the QA or staging env is behind, redeploy it with that skill's `redeploy.sh`.
 2. Run the merged-ticket checklist ([`tracker-ops`](../tracker-ops/SKILL.md)), then post or update the QA comment ([`ticket-communication`](../ticket-communication/SKILL.md)).
 3. Transition to Ready for testing.
 4. Remove the worktree.

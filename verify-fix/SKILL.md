@@ -21,7 +21,7 @@ Most corrections in past bug campaigns came from skipping one of the steps below
    - <PROD> runs `<LIVE_BRANCH>`, not `<DEV_BRANCH>`.
    - [deploy-check/ENVIRONMENTS.md](../deploy-check/ENVIRONMENTS.md) has the full map of hosts, branches and DBs.
    - To find which branches hold the fix, run `git branch -r --contains <sha>`. Remember whether `<LIVE_BRANCH>` merges forward into `<DEV_BRANCH>` automatically.
-   - To check what an env actually serves, run the [`deploy-check`](../deploy-check/SKILL.md) skill.
+   - To check what an env actually serves, run the [`deploy-check`](../deploy-check/SKILL.md) skill. If the QA or staging env lags behind a merged fix, redeploy it with that skill instead of waiting.
    - Done when you can say which envs have the fix and which don't.
 
 3. **Go red on the base code.** The base is the MR's target branch (chosen in [`bug-fix`](../bug-fix/SKILL.md) step 4). Reproduce on the local stack ([`local-stack`](../local-stack/SKILL.md)).

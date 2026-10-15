@@ -1,6 +1,6 @@
 ---
 name: deploy-check
-description: Check which code an environment actually runs and whether a merged fix is deployed there. Use before telling QA where to retest, or when a reopen may be a deploy gap.
+description: Check which code an environment actually runs and whether a merged fix is deployed there, and redeploy the QA / staging env when it lags. Use before telling QA where to retest, when a reopen may be a deploy gap, or when verification needs a merged fix on the QA or staging env.
 ---
 
 # Is the fix deployed?
@@ -30,3 +30,18 @@ The env-to-branch map is in [ENVIRONMENTS.md](ENVIRONMENTS.md).
 4. **Check the open tab.** A tab can hold an old cached bundle. Reload it with `fetch(url, {cache: 'reload'})` and then `location.reload()`, and check the live code: for AngularJS, `injector.get('<name>Directive')[0].controller.toString().includes('<marker>')`.
 
 5. **Report it as provenance:** "merged to `<branch>` at T; `<env>` serves it since T2 (`<evidence>`)", or "not on `<env>` yet: `<evidence>`". Done when every env you name in a QA comment has this line behind it.
+
+## Redeploy when the env lags
+
+This fits envs that run each service's moving `<DEV_IMAGE_TAG>` image with `imagePullPolicy: Always`, where nothing restarts the pods when the `<DEV_BRANCH>` pipeline publishes a new image. When step 3 shows the QA or staging env is behind and verification needs the fix there, run:
+
+```bash
+scripts/redeploy.sh <deployment> <merge commit sha> qa staging
+```
+
+- `<deployment>` is the k8s name. Deployments sharing the image restart together (a service and its jobs worker, for example).
+- The sha is the MR's merge (or squash) commit. For a `<LIVE_BRANCH>` fix it reaches `<DEV_BRANCH>` through the forward merge; if the script times out waiting, check that `<LIVE_BRANCH>` was merged into `<DEV_BRANCH>`.
+- It waits for the passed `<DEV_BRANCH>` pipeline that contains the sha, checks the registry's `<DEV_IMAGE_TAG>` was pushed after the fix landed, restarts only pods not already on that digest, and confirms the new pods run it. Its last line per env is your provenance evidence.
+- It stops on a failed pipeline, any env other than qa or staging, or an image pinned to a version: those need a real deploy, so ask the developer.
+- A restart blips the service for <QA_TEAM> for about a minute. The script restarts only when the digest differs, so don't loop it.
+- Fill the placeholders at the top of the script first. It uses `glab`, `aws ecr` and an ssh alias per env with `kubectl`; swap those calls for another code host or registry.
