@@ -1,6 +1,6 @@
 ---
 name: ticket-monitor
-description: Set up an unattended watcher that wakes on a schedule, finds new QA reopens and comments on your <TRACKER> bug tickets, handles each with one sub-agent (investigate, fix, reply), and leaves a morning report.
+description: Set up an unattended watcher that wakes on a schedule, finds new QA reopens, comments and merged MRs on your <TRACKER> bug tickets, handles each with one sub-agent (investigate, fix, reply, or run the post-merge handoff), and leaves a morning report.
 disable-model-invocation: true
 argument-hint: "Interval (default 30 min) and what the monitor may do unattended"
 ---
@@ -19,19 +19,20 @@ Detection by script makes every run cheap and repeatable. The state file makes r
 ## Steps
 
 1. **Agree the mandate** with the developer, and write it word for word into the scheduled prompt. Cover:
-   - what the monitor may do unattended: investigate, push branches, open MR/PRs, reply on <TRACKER>;
-   - what it never does: merge, move a ticket past In Review, message anyone outside <TRACKER>/<CODE_HOST>, decide product questions;
+   - which items it handles (`MONITOR_TYPES`): `reopen`, `comment`, `merged`, or a subset;
+   - what it may do unattended: investigate, push branches, open MR/PRs, reply on <TRACKER>; for `merged`, also redeploy the QA / staging env and move the ticket to Ready for testing;
+   - what it never does: merge, move a ticket past In Review (except Ready for testing after a merge), message anyone outside <TRACKER>/<CODE_HOST>, decide product questions;
    - the interval;
    - when it should stop.
 
 2. **Set up the state.**
-   - Create `~/.claude/bug-monitor/` holding `state.json`: `{"lastCheck": "<now UTC>", "handledComments": [], "handledReopens": []}`. Add an empty `report.md`.
-   - Copy `scripts/detect.py` there. It talks to the Jira Cloud REST API; for another <TRACKER>, port its two queries and keep the JSON output.
+   - Create `~/.claude/bug-monitor/` holding `state.json`: `{"lastCheck": "<now UTC>", "handledComments": [], "handledReopens": [], "handledMerges": []}`. Add an empty `report.md`.
+   - Copy `scripts/detect.py` there. It talks to the Jira Cloud REST API, and to GitLab through `glab` (logged in as you) for merged MRs; for another <TRACKER> or <CODE_HOST>, port those queries and keep the JSON output.
    - Export the configuration:
      - required: `JIRA_BASE` (site URL), `JIRA_PROJECT` (<PROJECT> key), `JIRA_EMAIL`, `JIRA_ME` (your accountId), `MONITOR_FORWARD_STATES` (comma list of statuses past development, e.g. `Ready for testing,QA Validation,Ready for deploy,Done,Won't do`);
-     - optional: `MONITOR_LABELS` (comma list of every campaign label: merge-risk, triage and retest labels), `MONITOR_ISSUE_TYPE` (default `Bug`), `MONITOR_BOT_NAMES` (comma list of display names to ignore), `JIRA_TOKEN_FILE` (default `~/.config/jira-token`), `MONITOR_DIR` (default `~/.claude/bug-monitor`).
+     - optional: `MONITOR_LABELS` (comma list of every campaign label: merge-risk, triage and retest labels), `MONITOR_ISSUE_TYPE` (default `Bug`), `MONITOR_BOT_NAMES` (comma list of display names to ignore), `JIRA_TOKEN_FILE` (default `~/.config/jira-token`), `MONITOR_DIR` (default `~/.claude/bug-monitor`), `MONITOR_TYPES` (default `reopen,comment,merged`).
 
-3. **Test the detector once by hand:** `python3 -I ~/.claude/bug-monitor/detect.py`. It prints JSON listing `items`, each a `reopen` or a `comment` with key, id and author. A campaign ticket is a bug of `MONITOR_ISSUE_TYPE` carrying one of `MONITOR_LABELS` or assigned to you. It counts as a reopen when someone else moved a campaign ticket out of a forward state (`MONITOR_FORWARD_STATES`). It counts as a comment when someone else commented on a campaign ticket, or mentioned you anywhere in <PROJECT>.
+3. **Test the detector once by hand:** `python3 -I ~/.claude/bug-monitor/detect.py`. It prints JSON listing `items`, each a `reopen` or a `comment` with key, id and author. A campaign ticket is a bug of `MONITOR_ISSUE_TYPE` carrying one of `MONITOR_LABELS` or assigned to you. It counts as a reopen when someone else moved a campaign ticket out of a forward state (`MONITOR_FORWARD_STATES`). It counts as a comment when someone else commented on a campaign ticket, or mentioned you anywhere in <PROJECT>. A `merged` item is a ticket whose MRs by you were merged since the last check, with each MR's target branch and merge sha. It waits while another MR of yours for the same ticket is still open, and skips tickets already in a forward state (handled by hand).
 
 4. **Plan the handling** per [`fan-out-agents`](../fan-out-agents/SKILL.md): which models, how many agents at once, and how results reach the report.
 
@@ -42,8 +43,8 @@ Detection by script makes every run cheap and repeatable. The state file makes r
 ```
 TICKET MONITOR RUN. Mandate (granted <date> by <developer>): <copied word for word>.
 1. DETECT: run `python3 -I ~/.claude/bug-monitor/detect.py`. If items is empty: set lastCheck to this run's start time, append nothing, end with one short line.
-2. HANDLE: one sub-agent per ticket, run per fan-out-agents (model, isolation, relaying results), never two agents for the same ticket. Each agent gets the full rules: follow bug-fix (reopens, reviewer comments), verify-fix, ticket-communication, tracker-ops; stay inside the mandate; return ticket, trigger, root cause, action (MR URL / comment id), and what needs the developer.
-3. RECORD: add the handled ids to state.json, set lastCheck to this run's start time, and append one skimmable section per ticket to report.md (time UTC, ticket link, trigger, root cause, MR link, <TRACKER> comment id, open questions).
+2. HANDLE: one sub-agent per ticket, run per fan-out-agents (model, isolation, relaying results), never two agents for the same ticket. Each agent gets the full rules: follow bug-fix (reopens, reviewer comments; for `merged` items its "After the developer merges" section, redeploying with deploy-check's redeploy.sh), verify-fix, ticket-communication, tracker-ops; stay inside the mandate; return ticket, trigger, root cause, action (MR URL / comment id / new status), and what needs the developer.
+3. RECORD: add the handled ids (for `merged`, every id in `ids`) to state.json, set lastCheck to this run's start time, and append one skimmable section per ticket to report.md (time UTC, ticket link, trigger, root cause, MR link, <TRACKER> comment id, open questions).
 ```
 
 The skills named in HANDLE: [`bug-fix`](../bug-fix/SKILL.md), [`verify-fix`](../verify-fix/SKILL.md), [`ticket-communication`](../ticket-communication/SKILL.md), [`tracker-ops`](../tracker-ops/SKILL.md).
