@@ -1,0 +1,23 @@
+{
+  "envs": {
+    "dev": "https://dev.example.com",
+    "staging": "https://staging.example.com"
+  },
+  "adminLoginPath": "/admin/api/login",
+  "usersPath": "/admin/api/user",
+  "loginAsPath": "/admin/api/user/{userId}/login-as",
+  "adminConsolePath": "/admin-console",
+  "adminTokenFields": ["token", "authToken", "accessToken"],
+  "loginAsTokenField": "token",
+  "authHeader": "authorization",
+  "authScheme": "",
+  "userAppField": "appId",
+  "userRoleField": "type",
+  "adminRoleValue": "admin",
+  "tokenAppClaim": "appId",
+  "storageKey": "accessToken",
+  "cookieName": "authToken",
+  "credsDir": "~/.config/app-login",
+  "loginPagePath": "/login",
+  "defaultPath": "/dashboard"
+}

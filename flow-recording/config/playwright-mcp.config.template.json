@@ -1,0 +1,31 @@
+{
+  "browser": {
+    "browserName": "chromium",
+    "isolated": true,
+    "launchOptions": {
+      "headless": true,
+      "chromiumSandbox": false,
+      "args": [
+        "--no-sandbox"
+      ]
+    },
+    "contextOptions": {
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "ignoreHTTPSErrors": true,
+      "recordVideo": {
+        "dir": "__OUT__",
+        "size": {
+          "width": 1920,
+          "height": 1080
+        }
+      }
+    },
+    "initScript": [
+      "__SKILL__/scripts/cursor-overlay.js"
+    ]
+  },
+  "outputDir": "__OUT__"
+}
