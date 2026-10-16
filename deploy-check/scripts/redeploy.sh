@@ -57,7 +57,7 @@ running_digests() {
     | .status.containerStatuses[0].imageID | sub(".*@"; "")' <<<"$2" | sort -u
 }
 
-env_state() { ssh -o BatchMode=yes "$1" "kubectl -n ${NAMESPACES[$1]} get deploy,pods -o json"; }
+env_state() { ssh -o BatchMode=yes "$1" "kubectl -n ${NAMESPACES[$1]} get deploy,pods -o json" || die "$1: ssh/kubectl failed (is the env's bastion up?)"; }
 
 branch_image() {
   local image
@@ -90,7 +90,7 @@ redeploy_env() {
   echo "$env: ${stale[*]} now run $digest (restarted $(date -u +%FT%TZ))"
 }
 
-for env in "$@"; do repo=$(branch_image "$env" "$(env_state "$env")"); done
+for env in "$@"; do state=$(env_state "$env"); repo=$(branch_image "$env" "$state"); done
 repo=${repo#*/}; repo=${repo%:*}
 full_sha=$(glab api "$api/repository/commits/$sha" 2>/dev/null | jq -r '.id // empty') || true
 [ -n "$full_sha" ] || die "commit $sha not found in $project"
