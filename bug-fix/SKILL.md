@@ -16,6 +16,8 @@ Never merge MRs (MR/PR on <CODE_HOST>). The developer reviews and merges.
 1. **Read the whole ticket:** description, every comment, attachments (download the screenshots and QA videos and look at them) and linked tickets. Note the reporter's env, app and exact steps.
 
 2. **Find the root cause** on the code the reporter's env runs: `<LIVE_BRANCH>` for <PROD> and the release env, `<DEV_BRANCH>` for the staging and QA envs. Use `git fetch origin` and `git grep … origin/<branch>`. The root cause comes with clear repro steps someone else can follow. Done when you can point at file:line and say why it produces exactly the reported symptom.
+   - **Regression label:** start from what changed. List the merges on that branch from the last two weeks in the repos involved (`git log origin/<branch> --merges --since=2.weeks`), including your own backports, and read the tickets they close. A deliberate behaviour change shows up here first.
+   - **Raised from the e2e suite:** start from the failing spec. Find it in the e2e repo by the ticket's expected values or test case ID, on every branch the suite runs from; its env config gives the app and URL. When the spec expects behaviour that changed on purpose, the fix is an MR to the spec.
 
 3. **Choose the outcome.**
    - **Fix it** when it's small. Small means roughly ≤ 50 non-test lines, reproducible and verifiable locally, with no migration or backfill, and not a risky core flow (pricing engine, checkout, job routing). Several repos with small changes is still small: one MR per repo.
@@ -29,6 +31,7 @@ Never merge MRs (MR/PR on <CODE_HOST>). The developer reviews and merges.
    | Big, risky, or can't be verified locally | Needs dev attention |
    | Can't reproduce | Ask the reporter to re-check, with the exact steps you tried |
    | The test case or docs disagree with current behaviour that customers rely on | Propose updating the test case or doc (fix the doc before closing) |
+   | An e2e spec expects behaviour that changed on purpose | Close; MR to the spec on each branch the suite runs from |
    | Rare, awkward or "only cosmetic" | Still a bug: find the cause, then fix or route it. "Won't fix" needs a cause |
 
 4. **Branch in a worktree.**

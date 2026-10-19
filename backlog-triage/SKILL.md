@@ -18,7 +18,7 @@ The campaign goal is **a shrinking backlog**: every ticket in scope ends with an
    - Skip tickets that someone else is actively working on (assigned to another developer, and updated recently). Report them instead of reassigning.
    - Done when the developer has seen the count and the skip list.
 
-2. **Classify cheaply.** Run one read-only pass per ticket ([`fan-out-agents`](../fan-out-agents/SKILL.md), one `<CHEAP_MODEL>` agent each). Each agent reads the ticket and the code on the reporter's branch and returns:
+2. **Classify cheaply.** Run one read-only pass per ticket ([`fan-out-agents`](../fan-out-agents/SKILL.md), one `<CHEAP_MODEL>` agent each). Each agent reads the ticket and the code on the reporter's branch, following the label leads in [`bug-fix`](../bug-fix/SKILL.md) step 2 for regression and e2e-suite tickets, and returns:
    - the likely outcome;
    - the rough fix size;
    - the repos involved;

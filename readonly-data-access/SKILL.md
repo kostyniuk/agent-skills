@@ -27,7 +27,8 @@ Every access here is **read-only** and **minimal**: the rows and lines a questio
 1. **Tunnel**, only if it isn't already up:
    `pg_isready -h 127.0.0.1 -p <port> || ssh -fN -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -L 127.0.0.1:<port>:<db-host>:5432 <ssh-alias>`.
    - When the SSH aliases go through a cloud session manager (e.g. AWS SSM), an auth or session error means the SSO session expired: run the SSO login (e.g. `aws sso login`), which needs a human.
-   - DB hosts are in the infrastructure config, `<CONFIG_DIR>/<env>/` (e.g. `terraform.tfvars`).
+   - DB hosts are in the infrastructure config, `<CONFIG_DIR>/<env>/` (e.g. `terraform.tfvars`); some configs hold only the instance name, so record the full host pattern here. An empty host still binds the port and leaves a dead listener: check `pg_isready` after opening.
+   - Close a tunnel by the PID on its port: `kill $(ss -ltnp | grep ':<port> ' | grep -o 'pid=[0-9]*' | cut -d= -f2)`. `pkill -f` matches its own shell and kills it.
    - Never bind <DB_PORT_LOCAL> (the local docker Postgres).
 2. **Credentials** come from `~/.pgpass` (`127.0.0.1:<port>:*:<user>:<password>`). The source is the DB password variable in the same infrastructure config. Never echo or pass a password on a command line.
 3. **Query:**
