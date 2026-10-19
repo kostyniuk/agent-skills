@@ -48,7 +48,7 @@ scripts/redeploy.sh <deployment> <merge commit sha> qa staging
 
 ## Re-patch a pinned release env
 
-Some release envs run a pinned patch image (`<service>:<RELEASE_PATCH_TAG>`) built from a git tag, not a moving branch image. To get a merged `<LIVE_BRANCH>` fix there, move that patch tag. Do it only when the developer asks: it rewrites a tag QA tests against.
+Read each deployment's image first: the release env may follow the moving `<LIVE_BRANCH>` image (restart it like QA) while <PROD> runs a pinned patch tag (`<service>:<RELEASE_PATCH_TAG>`), so the release env can be ahead of <PROD>. Moving a patch tag changes what <PROD> runs at its next deploy or pod restart: do it only when the developer asks, and say so.
 
 1. **Wait for the branch pipeline** of the merge commit. Tag pipelines usually retag the commit's image rather than rebuild it, so that image must exist first.
 2. **Move the tag** in the fix's repo only. First list what the move adds (`git log --oneline <tag>..origin/<LIVE_BRANCH>`). Then `git push origin :refs/tags/<tag> && git tag -f <tag> origin/<LIVE_BRANCH> && git push origin refs/tags/<tag>`, and confirm with `git ls-remote --tags origin <tag>`.
