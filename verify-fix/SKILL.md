@@ -26,6 +26,7 @@ Most corrections in past bug campaigns came from skipping one of the steps below
 
 3. **Go red on the base code.** The base is the MR's target branch (chosen in [`bug-fix`](../bug-fix/SKILL.md) step 4). Reproduce on the local stack ([`local-stack`](../local-stack/SKILL.md)).
    - For a QA reopen, first reproduce on **QA's env, app and exact UI state**: the filters, the date range (lists often default to a recent window, e.g. the last 90 days), the selected tab and the saved per-user grid settings. Take these from QA's comment or video frames. Log in there with [`app-login`](../app-login/SKILL.md).
+   - QA apps are often shared with the e2e suite and other testers, who change settings mid-run. Before blaming a setting, compare its `updated_at` with the ticket's creation time; today's value may not be the one the reporter saw.
    - If it won't go red, your model of the bug is wrong. Try QA's data, step through their video frame by frame, and read the reporter's config in the DB ([`readonly-data-access`](../readonly-data-access/SKILL.md)). If it still won't reproduce, ask the reporter to re-check with exact steps; never close it as "can't reproduce".
 
 4. **Go green on the final code.** Use the same steps and data. When the fix changes in a follow-up commit, re-run green and replace the old evidence.
@@ -57,6 +58,7 @@ Use the matching proof before writing each of these words:
 | by design | There is a spec, a ticket or the <PRODUCT_OWNER>'s decision. Your reading of the code doesn't count; ask the <PRODUCT_OWNER> and move the ticket to a clarification status |
 | root cause | Red appears when you introduce the cause and disappears when you remove it |
 | QA's setup is wrong | Their config was read (DB rows, pricing or worker config, settings) and shown to produce the symptom |
+| a setting is on / off / empty | Read along the **read path**: the screen that holds the setting ([`app-login`](../app-login/SKILL.md)), or the column the consuming code reads. A same-named column on another table doesn't count; legacy schemas keep stale copies |
 
 ## What doesn't count as verification
 
@@ -64,6 +66,8 @@ Use the matching proof before writing each of these words:
 - a show-me diagram (it can accompany the evidence, never replace it);
 - a green screen with a failing request behind it;
 - evidence from a different env or branch than the claim is about.
+
+When a check needs access you don't have (an expired admin session, SSO, credentials), stop and ask the developer for it. Evidence is the product's own screen or response; a table you assembled from DB reads stands in for nothing.
 
 When you truly can't verify, write `**Not verified:** <reason>` in the MR.
 

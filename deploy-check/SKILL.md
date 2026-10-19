@@ -45,3 +45,13 @@ scripts/redeploy.sh <deployment> <merge commit sha> qa staging
 - It stops on a failed pipeline, any env other than qa or staging, or an image pinned to a version: those need a real deploy, so ask the developer.
 - A restart blips the service for <QA_TEAM> for about a minute. The script restarts only when the digest differs, so don't loop it.
 - Fill the placeholders at the top of the script first. It uses `glab`, `aws ecr` and an ssh alias per env with `kubectl`; swap those calls for another code host or registry.
+
+## Re-patch a pinned release env
+
+Some release envs run a pinned patch image (`<service>:<RELEASE_PATCH_TAG>`) built from a git tag, not a moving branch image. To get a merged `<LIVE_BRANCH>` fix there, move that patch tag. Do it only when the developer asks: it rewrites a tag QA tests against.
+
+1. **Wait for the branch pipeline** of the merge commit. Tag pipelines usually retag the commit's image rather than rebuild it, so that image must exist first.
+2. **Move the tag** in the fix's repo only. First list what the move adds (`git log --oneline <tag>..origin/<LIVE_BRANCH>`). Then `git push origin :refs/tags/<tag> && git tag -f <tag> origin/<LIVE_BRANCH> && git push origin refs/tags/<tag>`, and confirm with `git ls-remote --tags origin <tag>`.
+3. **Watch the tag pipeline.** A job stuck waiting for a runner for 2–3 minutes: retry it, and cancel the publish jobs for apps whose code didn't change to free runners. Say which images you didn't rebuild.
+4. **Restart only that deployment** on the release env, wait for `rollout status`, and leave every other service alone.
+5. **Prove it** with steps 2–3 above: the new pod's `imageID` digest matches the pushed tag, and the env serves the marker.

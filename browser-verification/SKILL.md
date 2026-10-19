@@ -37,6 +37,8 @@ CDP helpers live in `scripts/`. They take a tab id or a URL substring. Env vars:
 - `node scripts/click.mjs <tab> '<js returning an element>'` sends a real mouse click. React, data-grid widgets (e.g. Kendo) and some framework-bound links ignore `el.click()`.
 - `node scripts/fclick.mjs <tab> '<js using d>'` clicks inside the first same-origin iframe (`d` is the iframe's document). Legacy server-rendered settings pages embedded in the app (e.g. loaded with `?embedded=true`) render there.
 
+**Finding a setting's screen.** Settings screens can live in a legacy app rather than the main frontend repo. To map a DB field or API flag to its screen, grep the e2e suite's settings helpers for it; their names and doc comments carry the UI label.
+
 UI rules that cost re-runs:
 - **Prove a UI claim along the user's path:** click the filter, type the date, press Apply. Seeding `localStorage` or calling the API sets up state; it proves nothing about what a user sees.
 - Buttons and tabs are often CSS-uppercased. Match text case-insensitively.
@@ -58,7 +60,7 @@ UI rules that cost re-runs:
 - **Screenshots:** take them with `shot`, crop with PIL to the part that proves the point, and blur personal data with `GaussianBlur`. Open each one with Read before using it.
 - **Viewport overrides** reset when the websocket closes. Set the override and take the screenshot in the same script run.
 - **Downloads** (Export PDF and similar): send `Browser.setDownloadBehavior` on the browser websocket. Render the PDF with `pdftoppm -png -r 110`, and count rows with `pdftotext`.
-- **Proof that lives outside the app** (<PAYMENT_PROVIDER> settings such as Stripe, <LOG_SERVICE> logs): render the read-only data into a small HTML table and screenshot it in the CDP Chrome.
+- **Proof that lives outside the app** (<PAYMENT_PROVIDER> settings such as Stripe, <LOG_SERVICE> logs): render the read-only data into a small HTML table and screenshot it in the CDP Chrome. Anything the app has a screen for is captured from that screen.
 - **Video of a flow:** use [`flow-recording`](../flow-recording/SKILL.md).
 - **Video of a CLI next to the browser it opens:** use [`terminal-recording`](../terminal-recording/SKILL.md).
 

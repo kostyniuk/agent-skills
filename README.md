@@ -27,7 +27,7 @@ for d in $PWD/*/; do ln -sfn "$d" ~/.claude/skills/$(basename "$d"); done   # Cl
 
 | Skill | What it does |
 |---|---|
-| [`deploy-check`](deploy-check/SKILL.md) | Which code an env really runs; whether a fix is deployed there; waits for CI and redeploys the QA / staging env when it lags |
+| [`deploy-check`](deploy-check/SKILL.md) | Which code an env really runs; whether a fix is deployed there; waits for CI and redeploys the QA / staging env when it lags; re-patches a pinned release env |
 | [`local-stack`](local-stack/SKILL.md) | Run a branch locally and prove it; local APIs and DBs |
 | [`browser-verification`](browser-verification/SKILL.md) | Drive the app with Playwright or CDP Chrome; screenshots, network failures |
 | [`app-login`](app-login/SKILL.md) | Log in as any app user on a QA env via an admin login-as API, unattended |

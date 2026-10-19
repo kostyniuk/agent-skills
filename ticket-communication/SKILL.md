@@ -41,7 +41,7 @@ Each audience reads one place, so each place gets only what that audience needs:
 
 4. **Keep code out of <TRACKER>.** No file paths, line numbers, SHAs, endpoints or DB columns: those go in the MR. Aim for 10–20 lines.
 
-5. **Attach the evidence.** Upload each image as a <TRACKER> attachment and put a one-line caption directly above it ([`tracker-ops`](../tracker-ops/SKILL.md)). Blur personal data first.
+5. **Attach the evidence:** the product's own screens, taken on the env ([`app-login`](../app-login/SKILL.md)). Missing access means asking the developer for it ([`verify-fix`](../verify-fix/SKILL.md)). Upload each image as a <TRACKER> attachment and put a one-line caption directly above it ([`tracker-ops`](../tracker-ops/SKILL.md)). Blur personal data first.
 
 6. **Check before posting.** Every factual sentence passes the observed/inferred gate of verify-fix (step 8). Mark what rests on someone else's statement: "according to the release notes…", "QA's video shows…".
 
