@@ -14,7 +14,8 @@ The main loop **orchestrates**: it picks the work, writes the brief, reviews wha
 1. **Write the brief file once.** Put it in a file (for example `~/agent-work/AGENT_BRIEF.md`), so every agent reads the same rules. It points at the skills that hold them: [`bug-fix`](../bug-fix/SKILL.md), [`verify-fix`](../verify-fix/SKILL.md), [`review-rules`](../review-rules/SKILL.md), [`tracker-ops`](../tracker-ops/SKILL.md), [`ticket-communication`](../ticket-communication/SKILL.md). It adds only what this round needs:
    - the goal and the authorised actions (push, MR/PR, <TRACKER> writes; never merge);
    - read-only vs write mode for this round;
-   - the return format: under 250 words, with outcome, root cause, MR URL, <TRACKER> ids, test data created and open questions.
+   - the return format: under 250 words, with outcome, root cause, MR URL, <TRACKER> ids, test data created, open questions and **blockers**.
+   - the blocker rule: when a step needs something the agent doesn't have, it stops that path and reports the blocker with its options, per [`verify-fix`](../verify-fix/SKILL.md) (Blocked check). A fallback it chose itself counts as not done.
 
    When a rule changes mid-run, update the file **and** SendMessage every running agent. They read the brief before it changed.
 
@@ -38,6 +39,7 @@ The main loop **orchestrates**: it picks the work, writes the brief, reviews wha
 6. **Collect results.**
    - **Nested results:** a sub-agent's own sub-agent reports to the **main** loop, not to its parent. When such a result arrives and the parent last said "waiting for …", forward it with SendMessage, or the parent stalls forever.
    - **Progress:** before telling the user an agent is "working", check its output file's last write time and tail.
+   - **Blockers:** relay each one to the user as soon as it arrives, with the options, and resume the agent on their choice. A sub-agent's "not checked" is a blocker too.
    - **Spot-check** each report's key claims (MR exists, pipeline status, the <TRACKER> comment is posted and reads right) before relaying them.
 
 7. **Survive restarts.** Host restarts cancel background agents silently. Keep progress on disk: the brief, a results journal, or the workflow journal. Resume only the units without a result; never redo finished ones.

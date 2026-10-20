@@ -4,6 +4,8 @@ Skills for coding agents (Claude Code, Codex, Cursor, …) that take a bug from 
 
 The core idea is **verification**: an agent may only claim "fixed", "deployed" or "can't reproduce" when it has observed it, on the environment the reporter uses, with before/after evidence.
 
+The second is **raising blockers**: when the agent lacks something it needs (access, data, a tool, an env), it tells the human right away, with the options, and the human picks the fallback ([`verify-fix`](verify-fix/SKILL.md), Blocked check). A gap first mentioned in the final report is too late.
+
 ## Make them yours
 
 The skills are project-neutral. Product-specific details are `<PLACEHOLDERS>`: fill them once for your project (the most used: `<TRACKER>`, `<CODE_HOST>`, `<DEV_BRANCH>`, `<LIVE_BRANCH>`, `<PROD>`, `<LOCAL_URL>`, `<QA_TEAM>`, `<PROJECT>`, `<LABEL_PREFIX>`). Keep the steps; replace the examples.

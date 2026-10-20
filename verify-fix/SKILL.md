@@ -67,9 +67,13 @@ Use the matching proof before writing each of these words:
 - a green screen with a failing request behind it;
 - evidence from a different env or branch than the claim is about.
 
-When a check needs access you don't have (an expired admin session, SSO, credentials), stop and ask the developer for it. Evidence is the product's own screen or response; a table you assembled from DB reads stands in for nothing.
+**Blocked check.** When a check needs something you don't have (an admin session, SSO, credentials, a customer login, matching data, an env), raise it with the developer the moment you hit it:
+- what is blocked, and what the claim loses without it;
+- the options you see, for example creating your own test customer and order in the QA app (see Side effects), getting access, or a weaker check.
 
-When you truly can't verify, write `**Not verified:** <reason>` in the MR.
+The developer picks the route; continue on a weaker check only after they chose it. Evidence is the product's own screen or response; a table you assembled from DB reads stands in for nothing.
+
+`**Not verified:** <reason>` goes in the MR only for a gap the developer accepted.
 
 ## Side effects
 
