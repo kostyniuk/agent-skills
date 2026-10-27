@@ -1,6 +1,6 @@
 ---
 name: tracker-ops
-description: Issue-tracker REST operations (Jira as the example): field ids, transitions, labels, attachments, comment edits, and the fixed/merged/retest/close checklists. Use when changing a tracker ticket.
+description: "Issue-tracker REST operations (Jira as the example): field ids, transitions, labels, attachments, comment edits, and the fixed/merged/retest/close checklists. Use when changing a tracker ticket."
 ---
 
 # Tracker operations

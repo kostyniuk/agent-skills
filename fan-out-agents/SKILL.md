@@ -1,6 +1,6 @@
 ---
 name: fan-out-agents
-description: Run many tickets or repos through parallel sub-agents safely: brief file, isolation, models, concurrency, relaying results, restarts. Use when delegating more than one task to sub-agents.
+description: "Run many tickets or repos through parallel sub-agents safely: brief file, isolation, models, concurrency, relaying results, restarts. Use when delegating more than one task to sub-agents."
 ---
 
 # Fan out agents
