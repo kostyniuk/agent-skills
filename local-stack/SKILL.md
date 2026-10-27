@@ -1,6 +1,6 @@
 ---
 name: local-stack
-description: Run and prove code on the local stack (<LOCAL_URL>): start services, load a branch, log in, call APIs, query local DBs. Use for local red/green checks or when the stack misbehaves.
+description: "Run and prove code on the local stack (<LOCAL_URL>): start services, load a branch, log in, call APIs, query local DBs. Use for local red/green checks or when the stack misbehaves."
 ---
 
 # Local stack

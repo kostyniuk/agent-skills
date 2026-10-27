@@ -1,6 +1,6 @@
 ---
 name: review-rules
-description: Code-review rules learned from rejected MRs/PRs: where validation, logic, side effects and tests belong. Use when reviewing a diff or before pushing a fix.
+description: "Code-review rules learned from rejected MRs/PRs: where validation, logic, side effects and tests belong. Use when reviewing a diff or before pushing a fix."
 ---
 
 # Review rules
