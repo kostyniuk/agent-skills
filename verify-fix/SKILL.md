@@ -37,7 +37,7 @@ Most corrections in past bug campaigns came from skipping one of the steps below
 
 6. **Prove along the user's path, then check below the screen.** Click the real controls a user clicks; storage or API shortcuts only set up state, they never prove a UI claim. Drive the flow with [`browser-verification`](../browser-verification/SKILL.md) and watch the network: no 4xx/5xx on the affected endpoints (an error-source header, if your gateway sets one, names the failing downstream service). Reload and confirm the saved state. A correct-looking field once hid a `400 Wrong options` on open.
 
-7. **Record the evidence** in the forms in [EVIDENCE.md](EVIDENCE.md).
+7. **Record the evidence** in the forms in [EVIDENCE.md](EVIDENCE.md). When applicable, add a visual with the [`show-me`](https://github.com/humanlayer/skills/tree/main/plugins/show-me/skills/show-me) skill. Use it when a reader has to hold a shape in their head to follow the evidence: a request path, a call tree, a state change, or a before → after flow. A Mermaid sequence or a `diff` of the call tree usually fits in the MR. Place the visual next to the evidence it explains; it never replaces the evidence.
 
 8. **Gate the report.** Read every sentence you are about to publish (MR, <TRACKER> comment, chat):
    - Each claim is observed, or it is reworded as inferred or deleted.
