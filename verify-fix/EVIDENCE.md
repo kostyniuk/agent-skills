@@ -14,7 +14,7 @@ Evidence has exactly two states: **before** (the target branch, with the whole f
 
 ## Where it goes
 
-- **MR description:** the before → after pair goes in its Verification part; the format itself is owned by `ticket-communication` (`MR-DESCRIPTION.md`). Upload images to <CODE_HOST> (helpers in [`tracker-ops`](../tracker-ops/SKILL.md)) and embed them inline. A show-me diagram is allowed only in addition to real evidence.
+- **MR description:** the before → after pair goes in its Verification part; the format itself is owned by `ticket-communication` (`MR-DESCRIPTION.md`). Upload images to <CODE_HOST> (helpers in [`tracker-ops`](../tracker-ops/SKILL.md)) and embed them inline. When it makes the before → after faster to read, add a [`show-me`](https://github.com/humanlayer/skills/tree/main/plugins/show-me/skills/show-me) visual: Mermaid or a `diff` of the flow, both rendered inline by <CODE_HOST>. Add it only on top of the real evidence.
 - **<TRACKER>:** attach each image to the ticket. QA often can't open <CODE_HOST> upload links, which redirect to sign-in. Embed each image under a one-line caption in the QA comment, using the tracker's inline-attachment syntax. The comment's wording follows [`ticket-communication`](../ticket-communication/SKILL.md).
 - **Files:** keep them in `${MR_RECORDINGS_DIR:-~/mr-recordings}/<TICKET-KEY>/`, named `<TICKET-KEY>-<env>-<app>-<what>.png`.
 
