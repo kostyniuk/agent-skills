@@ -45,3 +45,15 @@ for d in $PWD/*/; do ln -sfn "$d" ~/.claude/skills/$(basename "$d"); done   # Cl
 | [`fan-out-agents`](fan-out-agents/SKILL.md) | Run many tickets through parallel sub-agents safely |
 | [`backlog-triage`](backlog-triage/SKILL.md) | `/backlog-triage`: a whole bug-backlog campaign |
 | [`ticket-monitor`](ticket-monitor/SKILL.md) | `/ticket-monitor`: an unattended watcher for QA reopens and comments |
+
+## Understanding and reviewing a change
+
+| Skill | What it does |
+|---|---|
+| [`explain`](explain/SKILL.md) | `/explain`: a PR, file or feature for someone new to the code: key points, a small visual, a reading path |
+| [`review-order`](review-order/SKILL.md) | `/review-order`: a branch's changes as a reading order along the request path, every file once |
+| [`screen-tour`](screen-tour/SKILL.md) | `/screen-tour`: run the app and screenshot every screen that uses an API or hook, annotated with the request it fires |
+| [`review-with-friends`](review-with-friends/SKILL.md) | `/code-review` through other providers' models in parallel, findings merged side by side |
+| [`hunk-review`](hunk-review/SKILL.md) | Pull the human's inline notes off a live Hunk diff session and resolve each one |
+
+`explain` uses [`show-me`](https://github.com/humanlayer/skills); `review-with-friends` uses [`code-review`](https://github.com/mattpocock/skills).
