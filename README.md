@@ -36,7 +36,7 @@ for d in $PWD/*/; do ln -sfn "$d" ~/.claude/skills/$(basename "$d"); done   # Cl
 | [`readonly-data-access`](readonly-data-access/SKILL.md) | Read-only DB tunnels, logs and third-party config, no personal data out |
 | [`flow-recording`](flow-recording/SKILL.md) | Record a UI flow as a video for the MR |
 | [`terminal-recording`](terminal-recording/SKILL.md) | Record a terminal next to the browser it opens |
-| [`screen-tour`](screen-tour/SKILL.md) | `/screen-tour`: walk every screen that uses an API, hook or feature, one annotated screenshot per place with the request it fires |
+| [`screen-tour`](screen-tour/SKILL.md) | `/screen-tour`: walk every screen that uses an API, hook or feature at any URL (prod, staging, preview or local), one annotated screenshot per place with the request it fires |
 | [`tracker-ops`](tracker-ops/SKILL.md) | Jira REST helpers and the fixed/merged/retest/close checklists |
 
 ## At scale
