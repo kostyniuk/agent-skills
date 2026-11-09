@@ -37,6 +37,7 @@ for d in $PWD/*/; do ln -sfn "$d" ~/.claude/skills/$(basename "$d"); done   # Cl
 | [`flow-recording`](flow-recording/SKILL.md) | Record a UI flow as a video for the MR |
 | [`terminal-recording`](terminal-recording/SKILL.md) | Record a terminal next to the browser it opens |
 | [`screen-tour`](screen-tour/SKILL.md) | `/screen-tour`: walk every screen that uses an API, hook or feature at any URL (prod, staging, preview or local), one annotated screenshot per place with the request it fires |
+| [`proof-video`](proof-video/SKILL.md) | `/proof-video`: a narrated demo that proves a backend change: a real click in the local app, then the rows it just created, live in a desktop DB client (DataGrip), with slides and captions |
 | [`tracker-ops`](tracker-ops/SKILL.md) | Jira REST helpers and the fixed/merged/retest/close checklists |
 
 ## At scale

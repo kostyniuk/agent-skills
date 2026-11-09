@@ -1,0 +1,29 @@
+[
+ {
+  "id": "a01_intro",
+  "visual": "slide",
+  "title": "Why",
+  "lead": 2.0,
+  "text": "Our backend calls three upstream services with one shared login. So until now, nobody could tell who changed what. Every write is now recorded: who did it, what they did, to what, and how it ended."
+ },
+ {
+  "id": "a02_app",
+  "visual": "app",
+  "title": "The click",
+  "tail": 1.6,
+  "text": "Let's see it on the local stack. This is the list of events. The Skip column tells the upstream whether to skip an event. I'll tick it for the Q2 2026 report. The backend passes the change on, and the toast confirms it."
+ },
+ {
+  "id": "a03_db",
+  "visual": "datagrip",
+  "title": "The proof",
+  "text": "Now the proof, straight from the database. In DataGrip, I ask for every row created in the last minute. There they are: a request row and a response row. Scrolling right: the actor, the action, and the target. In data, the new value. And the outcome: succeeded, with how long it took, and when each row was created, seconds ago."
+ },
+ {
+  "id": "a04_outro",
+  "visual": "slide",
+  "title": "Recorded",
+  "tail": 3.5,
+  "text": "Every write is recorded this way, and recording never blocks the call. So the next time someone asks who changed that, the answer is one query away."
+ }
+]
