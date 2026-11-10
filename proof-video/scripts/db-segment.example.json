@@ -1,0 +1,17 @@
+{
+  "segment": "a03_db",
+  "app": "DataGrip",
+  "window": { "x": 0, "y": 33, "w": 1512, "h": 851 },
+  "editor": [698, 242],
+  "close_result_tab": [528, 380],
+  "grid": [756, 620],
+  "query": "-- Rows created in the last minute\nselect id, phase, actor, action, target_type, target_id, data, outcome, upstream_status, duration_ms,\n       created_at, date_trunc('second', localtimestamp - created_at) as created_ago\nfrom action_log where created_at > localtimestamp - interval '1 minute' order by id;",
+  "run_at": "I ask",
+  "scroll_beats": [
+    { "at": "the actor", "px": 300 },
+    { "at": "and the target", "px": 700 },
+    { "at": "In data", "px": 250 },
+    { "at": "the outcome", "px": 1000 },
+    { "at": "when each row was created", "px": 2000 }
+  ]
+}
