@@ -52,6 +52,7 @@ UI rules that cost re-runs:
 
 - In Playwright, collect failures with `page.on('response', r => r.status() >= 400 && bad.push(...))`, plus `pageerror` and console errors. Assert none on the affected endpoints, not just the DOM text.
 - With the CDP Chrome, run `cdp.mjs <tab> net 15000` while you act, or with `reload`.
+- **Read the requests each interaction fires, not just their status.** List them after every click (Playwright MCP: `browser_network_requests`; script: log `page.on('request')`). Flag a request repeated with the same URL and params, or one fired by a change the server never sees, such as a filter applied in the browser. A cache key holding a field the request doesn't send causes this.
 - On failures, quote the error-source / request-id response headers your gateway sets (e.g. `x-error-source`, `x-error-source-request-id`). They name the downstream service that failed.
 - After a save, reload and re-read the state.
 
