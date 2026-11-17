@@ -46,3 +46,9 @@ for d in $PWD/*/; do ln -sfn "$d" ~/.claude/skills/$(basename "$d"); done   # Cl
 | [`fan-out-agents`](fan-out-agents/SKILL.md) | Run many tickets through parallel sub-agents safely |
 | [`backlog-triage`](backlog-triage/SKILL.md) | `/backlog-triage`: a whole bug-backlog campaign |
 | [`ticket-monitor`](ticket-monitor/SKILL.md) | `/ticket-monitor`: an unattended watcher for QA reopens and comments |
+
+## Beyond bug fixing
+
+| Skill | What it does |
+|---|---|
+| [`quartr-video`](quartr-video/SKILL.md) | Build a narrated ~10-minute onboarding video (slides, a Playwright screencast synced to the narration, TTS voice, subtitles) and its Notion encyclopedia pages. Quartr-specific: it points at a local pipeline in `~/videos`, not placeholders |
